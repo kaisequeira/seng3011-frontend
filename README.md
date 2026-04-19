@@ -42,6 +42,15 @@ We use:
 After `pnpm install`, Husky installs the git hooks automatically.
 To run everything locally like CI: `pnpm run verify`.
 
+## Playwright Tests (Backend-Free)
+
+E2E tests are written with Playwright and **mock all `/api/*` calls** so they pass even if the backend is unavailable.
+
+```bash
+pnpm run test:e2e:install
+pnpm run test:e2e
+```
+
 ## Real AWS
 
 Create `.env.local` and set:

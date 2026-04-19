@@ -38,3 +38,12 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Playwright (E2E, mocked)
+        env:
+          # Ensure we never accidentally talk to a real upstream in CI.
+          TANGO_API_BASE_URL: "http://127.0.0.1:9"
+        run: pnpm run test:e2e
