@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 
 const RSS_URL = "https://feeds.content.dowjones.io/public/rss/mw_topstories"
 
+// Route segment config: cache this handler and revalidate every 5 minutes.
+export const revalidate = 300
+
 export type MarketHeadline = {
   title: string
   link: string
@@ -55,7 +58,6 @@ function parseMarketWatchRss(xml: string, limit: number): MarketHeadline[] {
 export async function GET() {
   try {
     const res = await fetch(RSS_URL, {
-      next: { revalidate: 300 },
       headers: {
         "User-Agent":
           "TANGO-UI/1.0 (course project dashboard; market headlines RSS)",
