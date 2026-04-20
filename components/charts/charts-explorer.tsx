@@ -25,7 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import {
   ChartContainer,
   ChartLegend,
@@ -372,7 +372,7 @@ export function ChartsExplorer() {
                 </SelectContent>
               </Select>
             ) : (
-              <Skeleton className="h-9 w-full" />
+              <LoadingSpinner className="h-9" label="Loading datasets" />
             )}
           </div>
 
@@ -439,10 +439,7 @@ export function ChartsExplorer() {
             Pick a dataset to begin.
           </div>
         ) : loadingEvents && !events ? (
-          <div className="space-y-3">
-            <Skeleton className="h-5 w-56" />
-            <Skeleton className="h-64 w-full" />
-          </div>
+          <LoadingSpinner className="min-h-72" label="Loading chart events" />
         ) : !hasData ? (
           <div className="text-sm text-muted-foreground">
             No OHLC events found for this selection. Try widening the date range

@@ -10,12 +10,9 @@ function asRecord(x: unknown): Record<string, unknown> | null {
     : null
 }
 
-export async function GET(req: Request, ctx: { params: Promise<Params> }) {
-  const { datasetId } = await ctx.params
-  const url = new URL(req.url)
-  const path = `/datasets/${encodeURIComponent(datasetId)}/events${url.search}`
-
-  const upstream = await tangoFetch(path, { method: "GET", requireAuth: true })
+async function jsonProxy(
+  upstream: Response
+): Promise<{ ok: boolean; status: number; json: unknown; text: string }> {
   const text = await upstream.text()
   let json: unknown = null
   try {
@@ -23,24 +20,38 @@ export async function GET(req: Request, ctx: { params: Promise<Params> }) {
   } catch {
     json = null
   }
+  return { ok: upstream.ok, status: upstream.status, json, text }
+}
 
-  if (!upstream.ok) {
+export async function GET(_req: Request, ctx: { params: Promise<Params> }) {
+  const { datasetId } = await ctx.params
+  const upstream = await tangoFetch(
+    `/datasets/${encodeURIComponent(datasetId)}`,
+    {
+      method: "GET",
+      requireAuth: true,
+    }
+  )
+  const { ok, status, json, text } = await jsonProxy(upstream)
+
+  if (!ok) {
     const rec = asRecord(json)
     const msg = rec && typeof rec.message === "string" ? rec.message : null
     return NextResponse.json(
       json ?? { error: "UPSTREAM_ERROR", message: msg ?? text },
-      { status: upstream.status }
+      { status }
     )
   }
 
-  return NextResponse.json(json ?? {})
+  return NextResponse.json(json ?? {}, { status })
 }
 
 export async function PUT(req: Request, ctx: { params: Promise<Params> }) {
   const { datasetId } = await ctx.params
   const body = await req.text()
+
   const upstream = await tangoFetch(
-    `/datasets/${encodeURIComponent(datasetId)}/events`,
+    `/datasets/${encodeURIComponent(datasetId)}`,
     {
       method: "PUT",
       requireAuth: true,
@@ -50,58 +61,39 @@ export async function PUT(req: Request, ctx: { params: Promise<Params> }) {
       body,
     }
   )
+  const { ok, status, json, text } = await jsonProxy(upstream)
 
-  const text = await upstream.text()
-  let json: unknown = null
-  try {
-    json = text ? JSON.parse(text) : null
-  } catch {
-    json = null
-  }
-
-  if (!upstream.ok) {
+  if (!ok) {
     const rec = asRecord(json)
     const msg = rec && typeof rec.message === "string" ? rec.message : null
     return NextResponse.json(
       json ?? { error: "UPSTREAM_ERROR", message: msg ?? text },
-      { status: upstream.status }
+      { status }
     )
   }
 
-  return NextResponse.json(json ?? { ok: true }, { status: upstream.status })
+  return NextResponse.json(json ?? { ok: true }, { status })
 }
 
-export async function DELETE(req: Request, ctx: { params: Promise<Params> }) {
+export async function DELETE(_req: Request, ctx: { params: Promise<Params> }) {
   const { datasetId } = await ctx.params
-  const body = await req.text().catch(() => "")
   const upstream = await tangoFetch(
-    `/datasets/${encodeURIComponent(datasetId)}/events`,
+    `/datasets/${encodeURIComponent(datasetId)}`,
     {
       method: "DELETE",
       requireAuth: true,
-      headers: {
-        "content-type": req.headers.get("content-type") ?? "application/json",
-      },
-      body: body || null,
     }
   )
+  const { ok, status, json, text } = await jsonProxy(upstream)
 
-  const text = await upstream.text()
-  let json: unknown = null
-  try {
-    json = text ? JSON.parse(text) : null
-  } catch {
-    json = null
-  }
-
-  if (!upstream.ok) {
+  if (!ok) {
     const rec = asRecord(json)
     const msg = rec && typeof rec.message === "string" ? rec.message : null
     return NextResponse.json(
       json ?? { error: "UPSTREAM_ERROR", message: msg ?? text },
-      { status: upstream.status }
+      { status }
     )
   }
 
-  return NextResponse.json(json ?? { ok: true }, { status: upstream.status })
+  return NextResponse.json(json ?? { ok: true }, { status })
 }
