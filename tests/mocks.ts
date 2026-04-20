@@ -2,16 +2,26 @@ import type { Page } from "@playwright/test"
 
 export async function mockLogin(page: Page) {
   await page.route("**/api/auth/login", async (route) => {
+    // Our UI reads auth from cookies. In E2E we set them directly to keep things deterministic.
+    await page.context().addCookies([
+      {
+        name: "tango_access_token",
+        value: "fake",
+        url: "http://localhost",
+        httpOnly: true,
+        sameSite: "Lax",
+      },
+      {
+        name: "tango_user_email",
+        value: "user@example.com",
+        url: "http://localhost",
+        httpOnly: false,
+        sameSite: "Lax",
+      },
+    ])
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      headers: {
-        // Multiple Set-Cookie: use array (Playwright); comma-join breaks parsing.
-        "Set-Cookie": [
-          "tango_access_token=fake; Path=/; HttpOnly; SameSite=Lax",
-          "tango_user_email=user%40example.com; Path=/; SameSite=Lax",
-        ],
-      },
       body: JSON.stringify({ ok: true }),
     })
   })
@@ -22,16 +32,14 @@ export async function seedAuthCookie(page: Page) {
     {
       name: "tango_access_token",
       value: "fake",
-      domain: "localhost",
-      path: "/",
+      url: "http://localhost",
       httpOnly: true,
       sameSite: "Lax",
     },
     {
       name: "tango_user_email",
       value: "user@example.com",
-      domain: "localhost",
-      path: "/",
+      url: "http://localhost",
       httpOnly: false,
       sameSite: "Lax",
     },

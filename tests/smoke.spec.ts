@@ -205,7 +205,7 @@ test("Create dataset from sidebar (mocked)", async ({ page }) => {
   await mockDatasetEvents(page, "dataset_new", [])
 
   await page.goto("/app")
-  await page.getByRole("button", { name: "New dataset" }).click()
+  await page.getByRole("button", { name: "Add dataset" }).click()
   await page.getByLabel("Name").fill("Created")
   await page.getByRole("button", { name: "Create" }).click()
 
