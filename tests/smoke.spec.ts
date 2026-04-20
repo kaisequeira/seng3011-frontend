@@ -17,18 +17,20 @@ import {
 test("Homepage renders", async ({ page }) => {
   await mockDocs(page)
   await page.goto("/")
-  await expect(page.getByRole("link", { name: /TANGO/i })).toBeVisible()
   await expect(
-    page.getByRole("navigation").getByRole("link", { name: "Sign in" })
+    page.getByRole("link", { name: "Get started" }).first()
+  ).toBeVisible()
+  await expect(
+    page.getByRole("link", { name: /Open dashboard/i })
   ).toBeVisible()
   await expect(
     page.getByRole("link", { name: "Swagger docs" }).first()
   ).toBeVisible()
-  await expect(
-    page.getByRole("link", { name: "Contact", exact: true })
-  ).toBeVisible()
+  await expect(page.getByRole("link", { name: "Contact us" })).toBeVisible()
   await expect(page.getByText("Team Mango", { exact: true })).toBeVisible()
   await expect(page.getByText("GridX", { exact: true }).first()).toBeVisible()
+  await expect(page.getByText("CALL THE API.")).toBeVisible()
+  await expect(page.getByText("SHIP REAL SIGNALS.")).toBeVisible()
 })
 
 test("Login sets session cookie (mocked) and opens /app", async ({ page }) => {
