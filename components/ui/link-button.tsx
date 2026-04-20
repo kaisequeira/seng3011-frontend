@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { buttonVariants, type ButtonProps } from "@/components/ui/button"
 
 type LinkButtonProps = Omit<ComponentProps<typeof Link>, "className"> &
-  Pick<ButtonProps, "variant" | "size"> & {
+  Partial<Pick<ButtonProps, "variant" | "size">> & {
     className?: string
   }
 
