@@ -9,6 +9,23 @@ function asRecord(x: unknown): Record<string, unknown> | null {
     : null
 }
 
+function decodeJwtPayload(token: string): Record<string, unknown> | null {
+  const parts = token.split(".")
+  if (parts.length < 2) return null
+  const payload = parts[1] ?? ""
+  try {
+    const b64 = payload.replace(/-/g, "+").replace(/_/g, "/")
+    const pad = b64.length % 4 ? "=".repeat(4 - (b64.length % 4)) : ""
+    const json = Buffer.from(`${b64}${pad}`, "base64").toString("utf8")
+    const parsed = JSON.parse(json) as unknown
+    return typeof parsed === "object" && parsed !== null
+      ? (parsed as Record<string, unknown>)
+      : null
+  } catch {
+    return null
+  }
+}
+
 export async function POST(req: Request) {
   const body = await req.json().catch(() => ({}))
   const email = typeof body?.email === "string" ? body.email : ""
@@ -61,10 +78,19 @@ export async function POST(req: Request) {
     )
   }
 
+  const jwt = idToken ? decodeJwtPayload(idToken) : null
+  const displayEmail =
+    (jwt && typeof jwt.email === "string" && jwt.email) ||
+    (jwt &&
+      typeof jwt["cognito:username"] === "string" &&
+      jwt["cognito:username"]) ||
+    undefined
+
   await setSessionCookies({
     accessToken,
     idToken,
     refreshToken,
+    userEmail: displayEmail,
   })
 
   return NextResponse.json({ ok: true })

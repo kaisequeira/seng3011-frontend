@@ -4,6 +4,7 @@ export const tangoCookies = {
   access: "tango_access_token",
   id: "tango_id_token",
   refresh: "tango_refresh_token",
+  userEmail: "tango_user_email",
 } as const
 
 export async function getAccessToken(): Promise<string | null> {
@@ -16,12 +17,14 @@ export async function clearSessionCookies() {
   store.set(tangoCookies.access, "", { path: "/", maxAge: 0 })
   store.set(tangoCookies.id, "", { path: "/", maxAge: 0 })
   store.set(tangoCookies.refresh, "", { path: "/", maxAge: 0 })
+  store.set(tangoCookies.userEmail, "", { path: "/", maxAge: 0 })
 }
 
 export async function setSessionCookies(tokens: {
   accessToken: string
   idToken?: string
   refreshToken?: string
+  userEmail?: string
 }) {
   const store = await cookies()
   const isProd = process.env.NODE_ENV === "production"
@@ -37,4 +40,15 @@ export async function setSessionCookies(tokens: {
   if (tokens.idToken) store.set(tangoCookies.id, tokens.idToken, baseOpts)
   if (tokens.refreshToken)
     store.set(tangoCookies.refresh, tokens.refreshToken, baseOpts)
+
+  // Display-only cookie so client components can show "Signed in as ...".
+  if (tokens.userEmail) {
+    store.set(tangoCookies.userEmail, tokens.userEmail, {
+      httpOnly: false,
+      sameSite: "lax",
+      secure: isProd,
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7,
+    })
+  }
 }
