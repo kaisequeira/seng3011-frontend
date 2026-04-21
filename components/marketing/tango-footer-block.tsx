@@ -4,9 +4,11 @@ import { Footer7 } from "@/components/footer7"
 
 export function TangoFooterBlock({
   apiBase,
+  docsUrl,
   mailto,
 }: {
   apiBase: { configured?: string; example: string }
+  docsUrl: string
   mailto: string
 }) {
   return (
@@ -23,7 +25,7 @@ export function TangoFooterBlock({
           <div className="font-mono text-xs break-all">
             API base: {apiBase.configured || apiBase.example}
           </div>
-          <div className="font-mono text-xs">Swagger: /api/docs</div>
+          <div className="font-mono text-xs break-all">Swagger: {docsUrl}</div>
         </div>
       }
       sections={[
@@ -37,7 +39,7 @@ export function TangoFooterBlock({
         },
         {
           title: "API",
-          links: [{ name: "Swagger docs", href: "/api/docs" }],
+          links: [{ name: "Swagger docs", href: docsUrl }],
         },
         {
           title: "Contact",
@@ -52,7 +54,7 @@ export function TangoFooterBlock({
         },
         {
           icon: <BookOpen className="size-5" />,
-          href: "/api/docs",
+          href: docsUrl,
           label: "Swagger docs",
         },
         {
@@ -67,7 +69,7 @@ export function TangoFooterBlock({
         },
       ]}
       copyright={`© ${new Date().getFullYear()} TANGO. Built for SENG3011.`}
-      legalLinks={[{ name: "Swagger docs", href: "/api/docs" }]}
+      legalLinks={[{ name: "Swagger docs", href: docsUrl }]}
       className="flex flex-col items-center justify-center"
     />
   )

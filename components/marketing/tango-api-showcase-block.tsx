@@ -56,7 +56,13 @@ await fetch(\`\${API_BASE}/datasets/\${datasetId}/events\`, {
   ]
 }
 
-export function TangoApiShowcaseBlock({ apiBaseUrl }: { apiBaseUrl: string }) {
+export function TangoApiShowcaseBlock({
+  apiBaseUrl,
+  docsUrl,
+}: {
+  apiBaseUrl: string
+  docsUrl: string
+}) {
   return (
     <CodeExample1
       tagline="API utility"
@@ -64,7 +70,7 @@ export function TangoApiShowcaseBlock({ apiBaseUrl }: { apiBaseUrl: string }) {
       headingHighlight="SHIP REAL SIGNALS."
       description="TANGO’s combined gateway covers datasets, retrieval, exports, charts, and predictive risk endpoints. The examples below use the real backend base URL shown on this deployment."
       buttonText="Open Swagger docs"
-      buttonUrl="/api/docs"
+      buttonUrl={docsUrl}
       codeSnippets={buildCodeSnippets(apiBaseUrl)}
       className="flex flex-col items-center justify-center border-y bg-muted/30"
     />

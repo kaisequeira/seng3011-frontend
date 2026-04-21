@@ -6,6 +6,7 @@ import { TangoHeroBlock } from "@/components/marketing/tango-hero-block"
 import { TangoIntegrationsBlock } from "@/components/marketing/tango-integrations-block"
 import { MarketingHeader } from "@/components/marketing/marketing-header"
 import { MarketingMotion } from "@/components/marketing/marketing-motion"
+import { buildTangoDocsUrl } from "@/lib/tango/config"
 
 export default function Page() {
   const mailto = `mailto:z5591304@ad.unsw.edu.au?subject=${encodeURIComponent(
@@ -20,6 +21,7 @@ export default function Page() {
   }
 
   const codePreviewBaseUrl = apiBase.configured || apiBase.example
+  const docsUrl = buildTangoDocsUrl(codePreviewBaseUrl)
 
   return (
     <main id="top" className="min-h-svh bg-background text-foreground">
@@ -31,11 +33,14 @@ export default function Page() {
       </section>
 
       <section id="api" className="scroll-mt-28">
-        <TangoApiShowcaseBlock apiBaseUrl={codePreviewBaseUrl} />
+        <TangoApiShowcaseBlock
+          apiBaseUrl={codePreviewBaseUrl}
+          docsUrl={docsUrl}
+        />
       </section>
 
       <section id="features" className="scroll-mt-28">
-        <TangoFeatureBlock />
+        <TangoFeatureBlock docsUrl={docsUrl} />
       </section>
 
       <section id="integrations" className="scroll-mt-28">
@@ -46,7 +51,7 @@ export default function Page() {
         <TangoComplianceBlock />
       </section>
 
-      <TangoFooterBlock apiBase={apiBase} mailto={mailto} />
+      <TangoFooterBlock apiBase={apiBase} docsUrl={docsUrl} mailto={mailto} />
     </main>
   )
 }

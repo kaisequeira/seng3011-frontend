@@ -80,17 +80,26 @@ export function TangoComplianceBlock() {
                   <div className="absolute inset-6 rounded-full border border-dashed border-sky-300/50 dark:border-sky-400/20" />
                   <div className="absolute inset-14 rounded-full border border-dashed border-emerald-300/60 dark:border-emerald-400/20" />
                   <div className="absolute inset-0">
-                    <div className="absolute top-[26%] left-[12%] grid size-11 place-items-center rounded-2xl bg-sky-100 text-sky-700 shadow-sm dark:bg-sky-500/15 dark:text-sky-200">
+                    <div
+                      data-trust-node="api"
+                      className="absolute grid size-11 place-items-center rounded-2xl bg-sky-100 text-sky-700 shadow-sm dark:bg-sky-500/15 dark:text-sky-200"
+                    >
                       <span className="text-[11px] font-semibold tracking-[0.14em]">
                         API
                       </span>
                     </div>
-                    <div className="absolute top-[24%] right-[10%] grid size-11 place-items-center rounded-2xl bg-emerald-100 text-emerald-700 shadow-sm dark:bg-emerald-500/15 dark:text-emerald-200">
+                    <div
+                      data-trust-node="idp"
+                      className="absolute grid size-11 place-items-center rounded-2xl bg-emerald-100 text-emerald-700 shadow-sm dark:bg-emerald-500/15 dark:text-emerald-200"
+                    >
                       <span className="text-[10px] font-semibold tracking-[0.12em]">
                         IDP
                       </span>
                     </div>
-                    <div className="absolute bottom-[16%] left-1/2 grid size-11 -translate-x-1/2 place-items-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm dark:bg-amber-500/15 dark:text-amber-100">
+                    <div
+                      data-trust-node="obs"
+                      className="absolute grid size-11 place-items-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm dark:bg-amber-500/15 dark:text-amber-100"
+                    >
                       <span className="text-[10px] font-semibold tracking-[0.12em]">
                         OBS
                       </span>
