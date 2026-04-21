@@ -5,3 +5,12 @@ export function requireTangoBaseUrl(): string {
   }
   return base.replace(/\/+$/, "")
 }
+
+export function buildTangoDocsUrl(baseUrl: string): string {
+  const normalized = baseUrl.replace(/\/+$/, "")
+  return `${normalized}/docs`
+}
+
+export function requireTangoDocsUrl(): string {
+  return buildTangoDocsUrl(requireTangoBaseUrl())
+}

@@ -48,13 +48,13 @@ const features = [
   },
 ]
 
-export function TangoFeatureBlock() {
+export function TangoFeatureBlock({ docsUrl }: { docsUrl: string }) {
   return (
     <Feature43
       title="Everything the TANGO stack does once the data starts moving"
       features={features}
       buttonText="Open Swagger docs"
-      buttonUrl="/api/docs"
+      buttonUrl={docsUrl}
       className="flex flex-col items-center justify-center"
     />
   )
