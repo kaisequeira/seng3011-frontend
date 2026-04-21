@@ -58,23 +58,23 @@ export function MarketingMotion() {
       if (heroBrowser) {
         heroTimeline.fromTo(
           heroBrowser,
-          { y: 88, opacity: 0, rotateX: 8 },
-          { y: 36, opacity: 1, rotateX: 0, duration: 1 },
+          { y: 112, opacity: 0, rotateX: 8 },
+          { y: 54, opacity: 1, rotateX: 0, duration: 1.05 },
           "-=0.45"
         )
 
         gsap.fromTo(
           heroBrowser,
-          { y: 36 },
+          { y: 54 },
           {
-            y: 0,
+            y: -8,
             ease: "none",
             immediateRender: false,
             overwrite: "auto",
             scrollTrigger: {
               trigger: heroBrowser,
               start: "top 92%",
-              end: "top 30%",
+              end: "top 24%",
               scrub: true,
             },
           }
@@ -156,6 +156,58 @@ export function MarketingMotion() {
             },
           }
         )
+
+        const percentage = pipelineOutput.querySelector<HTMLElement>(
+          "[data-risk-percentage]"
+        )
+        const fill =
+          pipelineOutput.querySelector<HTMLElement>("[data-risk-fill]")
+        const level =
+          pipelineOutput.querySelector<HTMLElement>("[data-risk-level]")
+
+        if (percentage && fill && level) {
+          const values = [23.4, 41.8, 16.2, 35.7]
+          const state = { value: values[0] }
+
+          const updateRiskUi = () => {
+            percentage.textContent = `${state.value.toFixed(1)}%`
+            fill.style.width = `${state.value}%`
+
+            if (state.value >= 40) {
+              level.textContent = "High"
+              level.className =
+                "rounded-full bg-rose-400/20 px-3 py-1 text-xs font-medium text-rose-200"
+            } else if (state.value >= 25) {
+              level.textContent = "Elevated"
+              level.className =
+                "rounded-full bg-amber-400/20 px-3 py-1 text-xs font-medium text-amber-200"
+            } else {
+              level.textContent = "Low"
+              level.className =
+                "rounded-full bg-emerald-400/20 px-3 py-1 text-xs font-medium text-emerald-200"
+            }
+          }
+
+          updateRiskUi()
+
+          const riskTimeline = gsap.timeline({
+            repeat: -1,
+            repeatDelay: 0.25,
+            defaults: {
+              duration: 1.35,
+              ease: "sine.inOut",
+              onUpdate: updateRiskUi,
+            },
+          })
+
+          values.slice(1).forEach((value) => {
+            riskTimeline.to({}, { duration: 2, ease: "none" })
+            riskTimeline.to(state, { value })
+          })
+
+          riskTimeline.to({}, { duration: 2, ease: "none" })
+          riskTimeline.to(state, { value: values[0] })
+        }
       }
 
       const trustVisual = document.querySelector("[data-trust-visual]")
@@ -175,6 +227,52 @@ export function MarketingMotion() {
             },
           }
         )
+
+        const apiNode = trustVisual.querySelector<HTMLElement>(
+          "[data-trust-node='api']"
+        )
+        const idpNode = trustVisual.querySelector<HTMLElement>(
+          "[data-trust-node='idp']"
+        )
+        const obsNode = trustVisual.querySelector<HTMLElement>(
+          "[data-trust-node='obs']"
+        )
+
+        const positionOrbitNode = (
+          node: HTMLElement,
+          angle: number,
+          radius: number
+        ) => {
+          const visualRect = trustVisual.getBoundingClientRect()
+          const centerX = visualRect.width / 2
+          const centerY = visualRect.height / 2
+          const radians = (angle * Math.PI) / 180
+          const x = centerX + Math.cos(radians) * radius - node.offsetWidth / 2
+          const y = centerY + Math.sin(radians) * radius - node.offsetHeight / 2
+          gsap.set(node, { xPercent: 0, yPercent: 0, x, y })
+        }
+
+        if (apiNode && idpNode && obsNode) {
+          const orbitState = { angle: -130 }
+
+          const updateOrbit = () => {
+            const outerRadius = trustVisual.clientWidth * 0.36
+            const innerRadius = trustVisual.clientWidth * 0.24
+            positionOrbitNode(apiNode, orbitState.angle, outerRadius)
+            positionOrbitNode(idpNode, orbitState.angle + 120, outerRadius)
+            positionOrbitNode(obsNode, orbitState.angle + 255, innerRadius)
+          }
+
+          updateOrbit()
+
+          gsap.to(orbitState, {
+            angle: orbitState.angle + 360,
+            duration: 18,
+            ease: "none",
+            repeat: -1,
+            onUpdate: updateOrbit,
+          })
+        }
       }
 
       const footer = document.querySelector("footer")

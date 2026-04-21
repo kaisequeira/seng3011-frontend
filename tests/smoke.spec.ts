@@ -209,7 +209,7 @@ test("Create dataset from sidebar (mocked)", async ({ page }) => {
   await page.goto("/app")
   await page.getByRole("button", { name: "Add dataset" }).click()
   await page.getByLabel("Name").fill("Created")
-  await page.getByRole("button", { name: "Create" }).click()
+  await page.getByRole("button", { name: "Create", exact: true }).click()
 
   await expect(page).toHaveURL(/\/app\/datasets\/dataset_new$/)
   await expect(page.locator("input[aria-label='Dataset name']")).toHaveValue(

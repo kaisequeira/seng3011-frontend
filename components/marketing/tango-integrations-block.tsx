@@ -150,24 +150,39 @@ export function TangoIntegrationsBlock() {
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(56,189,248,0.22),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(253,224,71,0.16),transparent_28%),radial-gradient(circle_at_70%_80%,rgba(74,222,128,0.14),transparent_30%)]" />
               <div className="relative">
-                <p className="text-xs tracking-[0.28em] text-white/60 uppercase">
-                  Output layer
-                </p>
-                <h4 className="mt-3 text-2xl font-semibold tracking-tight">
-                  Next-7-day spike risk
-                </h4>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-xs tracking-[0.28em] text-white/60 uppercase">
+                      Output layer
+                    </p>
+                    <h4 className="mt-3 text-2xl font-semibold tracking-tight">
+                      Next-7-day spike risk
+                    </h4>
+                  </div>
+                  <span
+                    data-risk-level
+                    className="rounded-full bg-amber-400/20 px-3 py-1 text-xs font-medium text-amber-200"
+                  >
+                    Elevated
+                  </span>
+                </div>
                 <div className="mt-6 rounded-3xl border border-white/10 bg-white/6 p-5 backdrop-blur-sm">
                   <div className="flex items-baseline justify-between gap-4">
                     <span className="text-sm text-white/70">Probability</span>
-                    <span className="text-4xl font-semibold">23.4%</span>
+                    <span
+                      data-risk-percentage
+                      className="text-4xl font-semibold tabular-nums"
+                    >
+                      23.4%
+                    </span>
                   </div>
                   <div className="mt-4 h-3 rounded-full bg-white/10">
-                    <div className="h-full w-[23%] rounded-full bg-sky-300" />
+                    <div
+                      data-risk-fill
+                      className="h-full w-[23%] rounded-full bg-sky-300"
+                    />
                   </div>
                   <div className="mt-5 flex flex-wrap gap-2 text-xs text-white/80">
-                    <span className="rounded-full bg-white/10 px-3 py-1">
-                      Elevated
-                    </span>
                     <span className="rounded-full bg-white/10 px-3 py-1">
                       Mango regime shift
                     </span>
