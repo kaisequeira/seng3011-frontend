@@ -35,6 +35,7 @@ export function TangoFooterBlock({
             { name: "Get started", href: "/signup" },
             { name: "Sign in", href: "/login" },
             { name: "Open app", href: "/app" },
+            { name: "Pricing", href: "#pricing" },
           ],
         },
         {
