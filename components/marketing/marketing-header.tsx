@@ -1,14 +1,21 @@
+"use client"
+
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 const navItems = [
   { href: "#product", label: "Product" },
   { href: "#api", label: "API" },
   { href: "#features", label: "Features" },
   { href: "#integrations", label: "Integrations" },
+  { href: "#pricing", label: "Pricing" },
   { href: "#trust", label: "Trust" },
 ]
 
 export function MarketingHeader() {
+  const pathname = usePathname()
+  const isHome = pathname === "/"
+
   return (
     <header
       data-marketing-header
@@ -23,7 +30,11 @@ export function MarketingHeader() {
           {navItems.map((item) => (
             <a
               key={item.href}
-              href={item.href}
+              href={
+                isHome || !item.href.startsWith("#")
+                  ? item.href
+                  : `/${item.href}`
+              }
               data-scroll-link
               className="transition-colors hover:text-foreground"
             >
